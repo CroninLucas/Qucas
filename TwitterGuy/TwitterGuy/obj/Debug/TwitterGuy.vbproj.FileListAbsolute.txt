@@ -3,7 +3,6 @@ c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\bin\D
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.pdb
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.xml
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.vbprojResolveAssemblyReference.cache
-c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.Form1.resources
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.Resources.resources
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.vbproj.GenerateResource.Cache
 c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.exe
@@ -12,3 +11,7 @@ c:\users\lucas\documents\visual studio 2015\Projects\TwitterGuy\TwitterGuy\obj\D
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.dll
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.frmMain.resources
+C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.dlg_LinkedInChoose.resources
