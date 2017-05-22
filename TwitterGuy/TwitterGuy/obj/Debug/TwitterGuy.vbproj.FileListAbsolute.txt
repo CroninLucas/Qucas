@@ -15,3 +15,20 @@ C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\D
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.frmMain.resources
 C:\Users\Lucas\Documents\Visual Studio 2015\Projects\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.dlg_LinkedInChoose.resources
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.exe.config
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.exe
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.pdb
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\TwitterGuy.xml
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.vbprojResolveAssemblyReference.cache
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.dlg_LinkedInChoose.resources
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.frmMain.resources
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.Resources.resources
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.vbproj.GenerateResource.Cache
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.exe
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.xml
+C:\Users\Lucas\Desktop\Qucas-master\TwitterGuy\TwitterGuy\obj\Debug\TwitterGuy.pdb

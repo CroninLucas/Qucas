@@ -387,7 +387,6 @@ Volunteering:
 
         Dim IsVolunteering As Boolean = True
         Dim VolunteerCount As Integer
-        Dim CausesCount As Integer
         Try
             VolunteerCount = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/ul").childnodes.count
         Catch ex As Exception
@@ -395,18 +394,11 @@ Volunteering:
             IsVolunteering = False
             GoTo Certifications
         End Try
-        Try
-            CausesCount = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/div/ul").childnodes.count
-        Catch ex As Exception
-            'No causes
-            CausesCount = 0
-        End Try
-        Dim VolunteeringContainer(VolunteerCount - 1, CausesCount + 4) As String
+        Dim VolunteeringContainer(VolunteerCount - 1, 4) As String
         For i = 0 To VolunteerCount - 1
             x1 = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/ul/li[" & i + 1 & "]/header[1]")
             x2 = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/ul/li[" & i + 1 & "]/div")
             x3 = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/ul/li[" & i + 1 & "]/p")
-            x4 = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/div/ul")
             If x1 IsNot Nothing Then
                 VolunteeringContainer(i, 0) = x1.childnodes(0).innertext        'Position
                 VolunteeringContainer(i, 1) = x1.childnodes(1).innertext        'Place
@@ -419,23 +411,32 @@ Volunteering:
             If x3 IsNot Nothing Then
                 VolunteeringContainer(i, 4) = x3.innerhtml          'Description
             End If
-            If x4 IsNot Nothing Then
-                For ii = 0 To CausesCount
-                    Try
-                        VolunteeringContainer(i, 5 + ii) = x4.childnodes(ii).innertext
-                    Catch ex As Exception
-                        Exit For
-                    End Try
-                Next
-            End If
-            'Another for description of volunteer activity
-
 
             x1 = Nothing
             x2 = Nothing
             x3 = Nothing
             x4 = Nothing
             x5 = Nothing
+        Next
+
+Causes:
+
+        Dim Iscauses As Boolean = True
+        Dim CauseCount As Integer
+        Try
+            CauseCount = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/div/ul").childnodes.count
+        Catch ex As Exception
+            'No Causes
+            GoTo Certifications
+        End Try
+        Dim CauseContainer(CauseCount - 1) As String
+        For i = 0 To CauseCount - 1
+            x1 = Document.documentnode.selectsinglenode("//*[@id=""volunteering""]/div/ul")
+            Try
+                CauseContainer(i) = x1.childnodes(i).innertext
+            Catch ex As Exception
+            End Try
+            x1 = Nothing
         Next
 
 Certifications:
@@ -761,79 +762,127 @@ StartSqlImport:
             Catch ex As Exception
                 'Table already made
             End Try
-            For i = 1 To expcount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Exp" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
 
-            For i = 1 To Edcount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
-
-            For i = 1 To LangCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
-
-            For i = 1 To VolunteerCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
-
-
-            For i = 1 To SchoolCount
-                For ii = 1 To CourseCount
-                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
+            If IsExperience Then
+                For i = 1 To expcount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Exp" & i.ToString & "Title'"
                     If cmd.ExecuteScalar Is Nothing Then
-                        cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
+                        cmd.CommandText = "Alter table LinkedinUsers add Exp" & i.ToString & "Title varchar(250), " & vbLf &
+                            "Exp" & i.ToString & "Link varchar(250), Exp" & i.ToString & "Subtitle varchar(250), Exp" & i.ToString & "Logo varchar(250), Exp" & i.ToString & "Date1 date, Exp" & i.ToString & "Date2 date, " & vbLf &
+                        "Exp" & i.ToString & "Location Varchar(250), Exp" & i.ToString & "Desc Varchar(5000)"
+                        cmd.ExecuteNonQuery()
                     End If
                 Next
-            Next
+            End If
 
-            For i = 1 To AwardCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
-            For i = 1 To ScoreCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
+            If IsEducation Then
+                For i = 1 To Edcount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Ed" & i.ToString & "Title'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Ed" & i.ToString & "Title varchar(100), Ed" & i.ToString & "Link varchar(100), Ed" & i.ToString & "Degree varchar(100), " & vbLf &
+                        "Ed" & i.ToString & "Date1 date, Ed" & i.ToString & "Date2 date, Ed" & i.ToString & "Desc varchar(1000)"
+                    End If
+                Next
+            End If
 
-            For i = 1 To GroupCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
+            If IsLanguages Then
+                For i = 1 To LangCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Lang" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Lang" & i.ToString & " varchar(250)"
+                    End If
+                Next
+            End If
+            'dk
+            If IsVolunteering Then
+                For i = 1 To VolunteerCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Volun" & i.ToString & "Position'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add 'Volun" & i.ToString & "Position varchar(250), Volun" & i.ToString & "Place varchar(250), Volun" & i.ToString & "Date1 date,  Volun" & i.ToString & "Date2 date"
+                    End If
+                Next
+            End If
+
+            If Iscauses Then
+                For i = 1 To CauseCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Cause" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Cause" & i.ToString & " varchar(250)"
+                    End If
+                Next
+            End If
+
+            If IsCourses Then
+                For i = 1 To SchoolCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'School" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add School" & i.ToString & " varchar(250)"
+                    End If
+                    For ii = 1 To CourseCount
+                        cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Sch" & i.ToString & "Course" & ii.ToString & "'"
+                        If cmd.ExecuteScalar Is Nothing Then
+                            cmd.CommandText = "Alter table LinkedinUsers add Sch" & i.ToString & "Course" & ii.ToString & " varchar(250)"
+                        End If
+                    Next
+                Next
+            End If
+
+            If IsAwards Then
+                For i = 1 To AwardCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Award" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Award" & i.ToString & " varchar(500), AwardSubtitle" & i.ToString & " varchar(500), AwardDate" & i.ToString & " date, AwardDesc" & i.ToString & " varchar(1000)"
+                    End If
+                Next
+            End If
+
+            If IsScoring Then
+                For i = 1 To ScoreCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Exam" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Exam" & i.ToString & " varchar(250), Score" & i.ToString & " varchar(100), ExamDate" & i.ToString & " date, ExamDesc" & i.ToString & " varchar(1000)"
+                    End If
+                Next
+            End If
+
+            If IsGroups Then
+                For i = 1 To GroupCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Group" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Group" & i.ToString & " varchar(250), GroupLink" & i.ToString & " varchar(100)"
+                    End If
+                Next
+            End If
+
+            If IsOrganizations Then
+                For i = 1 To OrgCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Org" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Org" & i.ToString & " varchar(100), OrgPosition" & i.ToString & " varchar(250), Org" & i.ToString & "Date1 date, Org" & i.ToString & "Date2 date, OrgDesc" & i.ToString & "varchar(1000)" ' org orgposition date1 date2 desc
+                    End If
+                Next
+            End If
+
+            If IsSkills Then
+                For i = 1 To SkillCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Skill" & i.ToString & "'"
+                    If cmd.ExecuteScalar Is Nothing Then
+                        cmd.CommandText = "Alter table LinkedinUsers add Skill" & i.ToString & " varchar(100)"
+                    End If
+                Next
+            End If
+
+            ' project recommendation certification activity
+            If IsProjects Then
+                For i = 1 To ProjectCount
+                    cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = 'Project" & i.ToString & "'"
+                    If cmd.ExecuteScalar Then
+                        cmd.CommandText = "Alter table LinkedInUsers Add Project" & i.ToString & " varchar(500), "
+                    End If
+                Next
+            End If
 
 
-            For i = 1 To OrgCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
-
-
-            For i = 1 To SkillCount
-                cmd.CommandText = "Select Column_Name From Twitterguy.Information_Schema.Columns where table_name = 'LinkedInUsers' and Column_Name = '" & i.ToString & "'"
-                If cmd.ExecuteScalar Is Nothing Then
-                    cmd.CommandText = "Alter table LinkedinUsers add 'Exp" & i.ToString & "'"
-                End If
-            Next
 
             Try
 
@@ -891,177 +940,177 @@ StartSqlImport:
                 Catch ex As Exception
                     'the table is already there ''do nothing
                 End Try
-                    'Check if its already there
-                    cmd.CommandText = "Select * From LinkedInUsers where Link = '" & Link & "'"
-                    If cmd.ExecuteScalar Is Nothing Then
+                'Check if its already there
+                cmd.CommandText = "Select * From LinkedInUsers where Link = '" & Link & "'"
+                If cmd.ExecuteScalar Is Nothing Then
 
-                        cmd.CommandText = "Insert into LinkedInUsers " &
+                    cmd.CommandText = "Insert into LinkedInUsers " &
                         "(Link, Name, PictureLink, ConnectionsCount, ProfHeader, Location, CurrentPosition, CurrentPositionLink, PreviousPosition, PreviousPositionLink, EdInstitution, EdLink, SummaryText, "
-                        If IsExperience = True Then
-                            For i = 1 To expcount
-                                cmd.CommandText = cmd.CommandText & "Exp" & i.ToString & "Title, Exp" & i.ToString & "Link, Exp" & i.ToString & "Subtitle, Exp" & i.ToString & "Logo, Exp" & i.ToString & "Date1, Exp" & i.ToString & "Date2, Exp" & i.ToString & "Location, Exp" & i.ToString & "Desc, " & vbLf
-                            Next
-                        End If
-                        If IsEducation = True Then
-                            For i = 1 To Edcount
-                                cmd.CommandText = cmd.CommandText & "Ed" & i.ToString & "Title, Ed" & i.ToString & "Link, Ed" & i.ToString & "Degree, Ed" & i.ToString & "Date1, Ed" & i.ToString & "Date2, Ed" & i.ToString & "Desc, " & vbLf
-                            Next
-                        End If
-                        If IsLanguages = True Then
-                            For i = 1 To LangCount
-                                cmd.CommandText = cmd.CommandText & "Lang" & i.ToString & ", " & vbLf
-                            Next
-                        End If
-                        If IsVolunteering Then
-                            For i = 1 To VolunteerCount
-                                cmd.CommandText = cmd.CommandText & "VolunPosition" & i.ToString & ", VolunPlace" & i.ToString & ", VolunDate" & i.ToString & ", VolunCause" & i.ToString & ", " & vbLf
-                            Next
-                        End If
-                        If IsCourses Then
-                            For i = 1 To SchoolCount
-                                cmd.CommandText = cmd.CommandText & "School" & i.ToString & ", "
-                                For ii = 1 To CourseCount
-                                    cmd.CommandText = cmd.CommandText & "Sch" & i.ToString & "Course" & ii.ToString & ", " & vbLf
-                                Next
-                            Next
-                        End If
-                        If IsAwards Then
-                            For i = 1 To AwardCount
-                                cmd.CommandText = cmd.CommandText & "Award" & i.ToString & ", Award" & i.ToString & "Subtitle, Award" & i.ToString & "Date, Award" & i.ToString & "Desc, " & vbLf
-                            Next
-                        End If
-                        If IsScoring Then
-                            For i = 1 To ScoreCount
-                                cmd.CommandText = cmd.CommandText & "Exam" & i.ToString & ", Score" & i.ToString & ", ExamTime" & i.ToString & ", ExamDesc" & i.ToString & ", " & vbLf
-                            Next
-                        End If
-                        If IsGroups Then
-                            For i = 1 To GroupCount
-                                cmd.CommandText = cmd.CommandText & "Group" & i.ToString & ", Group" & i.ToString & "Link, " & vbLf
-                            Next
-                        End If
-                        If IsOrganizations Then
-                            For i = 1 To OrgCount
-                                cmd.CommandText = cmd.CommandText & "Org" & i.ToString & ", Org" & i.ToString & "Position, Org" & i.ToString & "Date1, Org" & i.ToString & "Date2, Org" & i.ToString & "Desc, " & vbLf
-                            Next
-                        End If
-                        For i = 1 To 10
-                            cmd.CommandText = cmd.CommandText & "SuggLink" & i.ToString & ", " & vbLf
+                    If IsExperience = True Then
+                        For i = 1 To expcount
+                            cmd.CommandText = cmd.CommandText & "Exp" & i.ToString & "Title, Exp" & i.ToString & "Link, Exp" & i.ToString & "Subtitle, Exp" & i.ToString & "Logo, Exp" & i.ToString & "Date1, Exp" & i.ToString & "Date2, Exp" & i.ToString & "Location, Exp" & i.ToString & "Desc, " & vbLf
                         Next
-                        If IsSkills Then
-                            For i = 1 To SkillCount - 1
-                                cmd.CommandText = cmd.CommandText & "Skills" & i.ToString & ", " & vbLf
-                            Next
-                        End If
-                        cmd.CommandText = cmd.CommandText & "LastUpdated)" & vbLf
-
-                        'Insert End
-                        'Values Start
-
-                        cmd.CommandText = cmd.CommandText & "Values ('" & Link & "', '" & Name & "', '" & Pic & "', '" & Connectionscount & "', '" & ProfHeader & "', '" & Location & "', '" & CurrentPositionName & "', '" & CurrentPositionLink & "', '" & PreviousPositionName & "', '" & PreviousPositionLink & "', '" & EducationName & "', '" & EducationLink & "', '" & SummaryText & "', " & vbLf
-                        If IsExperience = True Then
-                            For i = 0 To expcount - 1
-                                Dim Datey1 As DateTime
-                                Dim Datey2 As DateTime
-                                If ExperienceContainer(i, 5).Contains("Get") = False Then
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(ExperienceContainer(i, 5))
-                                Else
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
-                                End If
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(ExperienceContainer(i, 4))
-
-                                cmd.CommandText = cmd.CommandText & "'" & ExperienceContainer(i, 0) & "', '" & ExperienceContainer(i, 1) & "', '" & ExperienceContainer(i, 2) & "', '" & ExperienceContainer(i, 3) & "', '" & Datey1 & "', '" & Datey2 & "', '" & ExperienceContainer(i, 6) & "', '" & ExperienceContainer(i, 7) & "', " & vbLf
-                            Next
-                        End If
-                        If IsEducation = True Then
-                            For i = 0 To Edcount - 1
-                                Dim Datey1 As DateTime
-                                Dim Datey2 As DateTime
-                                If EducationContainer(i, 4).Contains("Get") = False Then
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(EducationContainer(i, 4))
-                                Else
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
-                                End If
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(EducationContainer(i, 3))
-
-                                cmd.CommandText = cmd.CommandText & "'" & EducationContainer(i, 0) & "', '" & EducationContainer(i, 1) & "', '" & EducationContainer(i, 2) & "', '" & Datey1 & "', '" & Datey2 & "', '" & EducationContainer(i, 5) & "', " & vbLf
-                            Next
-                        End If
-                        If IsLanguages = True Then
-                            For i = 0 To LangCount - 1
-                                cmd.CommandText = cmd.CommandText & "'" & LanguagesContainer(i, 0) & "', " & vbLf
-                            Next
-                        End If
-                        If IsVolunteering Then
-                            For i = 0 To VolunteerCount - 1
-                                Dim Datey1 As DateTime
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(VolunteeringContainer(i, 2))
-                                cmd.CommandText = cmd.CommandText & "'" & VolunteeringContainer(i, 0) & "', '" & VolunteeringContainer(i, 1) & "', '" & Datey1 & "', '" & VolunteeringContainer(i, 3) & "', " & vbLf
-                            Next
-                        End If
-                        If IsCourses Then
-                            For i = 0 To SchoolCount - 1
-                                cmd.CommandText = cmd.CommandText & "'" & CoursesContainer(i, 0) & "', "
-                                For ii = 1 To CourseCount
-                                    cmd.CommandText = cmd.CommandText & "'" & CoursesContainer(i, ii) & "', " & vbLf
-                                Next
-                            Next
-                        End If
-                        If IsAwards Then
-                            For i = 0 To AwardCount - 1
-                                Dim Datey1 As DateTime
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(AwardsContainer(i, 2))
-                                cmd.CommandText = cmd.CommandText & "'" & AwardsContainer(i, 0) & "', '" & AwardsContainer(i, 1) & "', '" & Datey1 & "', '" & AwardsContainer(i, 3) & "', " & vbLf
-                            Next
-                        End If
-                        If IsScoring Then
-                            For i = 0 To ScoreCount - 1
-                                Dim Datey1 As DateTime
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(ScoresContainer(i, 2))
-                                cmd.CommandText = cmd.CommandText & "'" & ScoresContainer(i, 0) & "', '" & ScoresContainer(i, 1) & "', '" & Datey1 & "', '" & ScoresContainer(i, 3) & "', " & vbLf
-                            Next
-                        End If
-                        If IsGroups Then
-                            For i = 0 To GroupCount - 1
-                                cmd.CommandText = cmd.CommandText & "'" & GroupsContainer(i, 0) & "', '" & GroupsContainer(i, 1) & "', " & vbLf
-                            Next
-                        End If
-                        If IsOrganizations Then
-                            For i = 0 To OrgCount - 1
-                                Dim Datey1 As DateTime
-                                Dim Datey2 As DateTime
-                                If OrgContainer(i, 3).Contains("Get") = False Then
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(OrgContainer(i, 3))
-                                Else
-                                    Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
-                                End If
-                                Datey1 = SqlTypes.SqlDateTime.op_Implicit(OrgContainer(i, 2))
-
-                                cmd.CommandText = cmd.CommandText & "'" & OrgContainer(i, 0) & "', '" & OrgContainer(i, 1) & "', '" & Datey1 & "', '" & Datey2 & "', '" & OrgContainer(i, 4) & "', " & vbLf
-                            Next
-                        End If
-                        For i = 0 To 9
-                            cmd.CommandText = cmd.CommandText & "'" & AlsoViewedContainer(i) & "', " & vbLf
-                        Next
-                        If IsSkills Then
-                            For i = 0 To SkillCount - 2
-                                cmd.CommandText = cmd.CommandText & "'" & SkillContainer(i) & "', " & vbLf
-                            Next
-                        End If
-
-                        'Values End
-
-                        cmd.CommandText = cmd.CommandText & "Getdate())"
-
-
-                        cmd.ExecuteNonQuery()
-                    Else
-                        'Update the values
-                        cmd.CommandText = "Update "
-                        cmd.ExecuteNonQuery()
                     End If
-                Catch ex As Exception
-                    MsgBox("Problem Inserting Profile Into SQL")
+                    If IsEducation = True Then
+                        For i = 1 To Edcount
+                            cmd.CommandText = cmd.CommandText & "Ed" & i.ToString & "Title, Ed" & i.ToString & "Link, Ed" & i.ToString & "Degree, Ed" & i.ToString & "Date1, Ed" & i.ToString & "Date2, Ed" & i.ToString & "Desc, " & vbLf
+                        Next
+                    End If
+                    If IsLanguages = True Then
+                        For i = 1 To LangCount
+                            cmd.CommandText = cmd.CommandText & "Lang" & i.ToString & ", " & vbLf
+                        Next
+                    End If
+                    If IsVolunteering Then
+                        For i = 1 To VolunteerCount
+                            cmd.CommandText = cmd.CommandText & "VolunPosition" & i.ToString & ", VolunPlace" & i.ToString & ", VolunDate" & i.ToString & ", VolunCause" & i.ToString & ", " & vbLf
+                        Next
+                    End If
+                    If IsCourses Then
+                        For i = 1 To SchoolCount
+                            cmd.CommandText = cmd.CommandText & "School" & i.ToString & ", "
+                            For ii = 1 To CourseCount
+                                cmd.CommandText = cmd.CommandText & "Sch" & i.ToString & "Course" & ii.ToString & ", " & vbLf
+                            Next
+                        Next
+                    End If
+                    If IsAwards Then
+                        For i = 1 To AwardCount
+                            cmd.CommandText = cmd.CommandText & "Award" & i.ToString & ", Award" & i.ToString & "Subtitle, Award" & i.ToString & "Date, Award" & i.ToString & "Desc, " & vbLf
+                        Next
+                    End If
+                    If IsScoring Then
+                        For i = 1 To ScoreCount
+                            cmd.CommandText = cmd.CommandText & "Exam" & i.ToString & ", Score" & i.ToString & ", ExamTime" & i.ToString & ", ExamDesc" & i.ToString & ", " & vbLf
+                        Next
+                    End If
+                    If IsGroups Then
+                        For i = 1 To GroupCount
+                            cmd.CommandText = cmd.CommandText & "Group" & i.ToString & ", Group" & i.ToString & "Link, " & vbLf
+                        Next
+                    End If
+                    If IsOrganizations Then
+                        For i = 1 To OrgCount
+                            cmd.CommandText = cmd.CommandText & "Org" & i.ToString & ", Org" & i.ToString & "Position, Org" & i.ToString & "Date1, Org" & i.ToString & "Date2, Org" & i.ToString & "Desc, " & vbLf
+                        Next
+                    End If
+                    For i = 1 To 10
+                        cmd.CommandText = cmd.CommandText & "SuggLink" & i.ToString & ", " & vbLf
+                    Next
+                    If IsSkills Then
+                        For i = 1 To SkillCount - 1
+                            cmd.CommandText = cmd.CommandText & "Skills" & i.ToString & ", " & vbLf
+                        Next
+                    End If
+                    cmd.CommandText = cmd.CommandText & "LastUpdated)" & vbLf
+
+                    'Insert End
+                    'Values Start
+
+                    cmd.CommandText = cmd.CommandText & "Values ('" & Link & "', '" & Name & "', '" & Pic & "', '" & Connectionscount & "', '" & ProfHeader & "', '" & Location & "', '" & CurrentPositionName & "', '" & CurrentPositionLink & "', '" & PreviousPositionName & "', '" & PreviousPositionLink & "', '" & EducationName & "', '" & EducationLink & "', '" & SummaryText & "', " & vbLf
+                    If IsExperience = True Then
+                        For i = 0 To expcount - 1
+                            Dim Datey1 As DateTime
+                            Dim Datey2 As DateTime
+                            If ExperienceContainer(i, 5).Contains("Get") = False Then
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(ExperienceContainer(i, 5))
+                            Else
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
+                            End If
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(ExperienceContainer(i, 4))
+
+                            cmd.CommandText = cmd.CommandText & "'" & ExperienceContainer(i, 0) & "', '" & ExperienceContainer(i, 1) & "', '" & ExperienceContainer(i, 2) & "', '" & ExperienceContainer(i, 3) & "', '" & Datey1 & "', '" & Datey2 & "', '" & ExperienceContainer(i, 6) & "', '" & ExperienceContainer(i, 7) & "', " & vbLf
+                        Next
+                    End If
+                    If IsEducation = True Then
+                        For i = 0 To Edcount - 1
+                            Dim Datey1 As DateTime
+                            Dim Datey2 As DateTime
+                            If EducationContainer(i, 4).Contains("Get") = False Then
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(EducationContainer(i, 4))
+                            Else
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
+                            End If
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(EducationContainer(i, 3))
+
+                            cmd.CommandText = cmd.CommandText & "'" & EducationContainer(i, 0) & "', '" & EducationContainer(i, 1) & "', '" & EducationContainer(i, 2) & "', '" & Datey1 & "', '" & Datey2 & "', '" & EducationContainer(i, 5) & "', " & vbLf
+                        Next
+                    End If
+                    If IsLanguages = True Then
+                        For i = 0 To LangCount - 1
+                            cmd.CommandText = cmd.CommandText & "'" & LanguagesContainer(i, 0) & "', " & vbLf
+                        Next
+                    End If
+                    If IsVolunteering Then
+                        For i = 0 To VolunteerCount - 1
+                            Dim Datey1 As DateTime
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(VolunteeringContainer(i, 2))
+                            cmd.CommandText = cmd.CommandText & "'" & VolunteeringContainer(i, 0) & "', '" & VolunteeringContainer(i, 1) & "', '" & Datey1 & "', '" & VolunteeringContainer(i, 3) & "', " & vbLf
+                        Next
+                    End If
+                    If IsCourses Then
+                        For i = 0 To SchoolCount - 1
+                            cmd.CommandText = cmd.CommandText & "'" & CoursesContainer(i, 0) & "', "
+                            For ii = 1 To CourseCount
+                                cmd.CommandText = cmd.CommandText & "'" & CoursesContainer(i, ii) & "', " & vbLf
+                            Next
+                        Next
+                    End If
+                    If IsAwards Then
+                        For i = 0 To AwardCount - 1
+                            Dim Datey1 As DateTime
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(AwardsContainer(i, 2))
+                            cmd.CommandText = cmd.CommandText & "'" & AwardsContainer(i, 0) & "', '" & AwardsContainer(i, 1) & "', '" & Datey1 & "', '" & AwardsContainer(i, 3) & "', " & vbLf
+                        Next
+                    End If
+                    If IsScoring Then
+                        For i = 0 To ScoreCount - 1
+                            Dim Datey1 As DateTime
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(ScoresContainer(i, 2))
+                            cmd.CommandText = cmd.CommandText & "'" & ScoresContainer(i, 0) & "', '" & ScoresContainer(i, 1) & "', '" & Datey1 & "', '" & ScoresContainer(i, 3) & "', " & vbLf
+                        Next
+                    End If
+                    If IsGroups Then
+                        For i = 0 To GroupCount - 1
+                            cmd.CommandText = cmd.CommandText & "'" & GroupsContainer(i, 0) & "', '" & GroupsContainer(i, 1) & "', " & vbLf
+                        Next
+                    End If
+                    If IsOrganizations Then
+                        For i = 0 To OrgCount - 1
+                            Dim Datey1 As DateTime
+                            Dim Datey2 As DateTime
+                            If OrgContainer(i, 3).Contains("Get") = False Then
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(OrgContainer(i, 3))
+                            Else
+                                Datey2 = SqlTypes.SqlDateTime.op_Implicit(Today.Month & "/" & Today.Day & "/" & Today.Year)
+                            End If
+                            Datey1 = SqlTypes.SqlDateTime.op_Implicit(OrgContainer(i, 2))
+
+                            cmd.CommandText = cmd.CommandText & "'" & OrgContainer(i, 0) & "', '" & OrgContainer(i, 1) & "', '" & Datey1 & "', '" & Datey2 & "', '" & OrgContainer(i, 4) & "', " & vbLf
+                        Next
+                    End If
+                    For i = 0 To 9
+                        cmd.CommandText = cmd.CommandText & "'" & AlsoViewedContainer(i) & "', " & vbLf
+                    Next
+                    If IsSkills Then
+                        For i = 0 To SkillCount - 2
+                            cmd.CommandText = cmd.CommandText & "'" & SkillContainer(i) & "', " & vbLf
+                        Next
+                    End If
+
+                    'Values End
+
+                    cmd.CommandText = cmd.CommandText & "Getdate())"
+
+
+                    cmd.ExecuteNonQuery()
+                Else
+                    'Update the values
+                    cmd.CommandText = "Update "
+                    cmd.ExecuteNonQuery()
+                End If
+            Catch ex As Exception
+                MsgBox("Problem Inserting Profile Into SQL")
             End Try
 
 
@@ -1082,7 +1131,7 @@ StartSqlImport:
             Return "01/01/" & Datey
         End Try
         Dim Month = Datey1(0)
-            Dim Monthnum As String
+        Dim Monthnum As String
         Dim Convertedstring As String
         Select Case Month
             Case "January"
@@ -1110,9 +1159,9 @@ StartSqlImport:
             Case "December"
                 Monthnum = "12"
             Case Else
-                monthnum = 0
+                Monthnum = 0
         End Select
         Convertedstring = Monthnum & "/" & "01" & "/" & year 'Not sure what to do for the day
-        Return ConvertedString
+        Return Convertedstring
     End Function
 End Module
